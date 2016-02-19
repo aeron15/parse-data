@@ -14,19 +14,46 @@ data<-as.data.frame(data)
 #Divide data into two columns
 data2<-data %>% separate(`Youth Build Friday Update Report`,into=c("grantee","program_number_parse"),sep=", YB")
 
+###
+new.col.names<-c("Region",
+"EnrollmentPer",
+"EnrollmentNum",
+"EnrollmentDen",
+"ExitTotal",
+"ExitSuc",
+"ExitUn",
+"GEDPer",
+"GEDNum",
+"GEDDen",
+"RegAp",
+"PlacementPer",
+"PlacementNum",
+"PlacementDen",
+"AttainmentPer",
+"AttainmentNum",
+"AttainmentDen",
+"LitPer",
+"LitNum",
+"LitDen",
+"RecidivismPer",
+"RecidivismNum",
+"RecidivismDen",
+"RetentionPer",
+"RetentionNum",
+"RetentionDen")
+###
+
 #Get number of columns and rename the columns
-ncols<-length(colnames(data2))-2
-#ncols<-length(colnames(data2))
 
-col.unit<-"col"
-new.col.names<-rep(col.unit,ncols)
-new.col.num<-as.character(1:ncols)
-#new.col.num<-as.character(3:ncols)
-
-new.col.names<-str_c(new.col.names,new.col.num)
+#ncols<-length(colnames(data2))-2
+#col.unit<-"col"
+#new.col.names<-rep(col.unit,ncols)
+#new.col.num<-as.character(1:ncols)
+#new.col.names<-str_c(new.col.names,new.col.num)
 
 colnames(data2)<-c(colnames(data2)[1:2],new.col.names)
 
+###
 #Add YB again to that colum
 data2<-data2 %>% transform(program_number_parse=str_c("YB",program_number_parse))
 
@@ -73,7 +100,29 @@ nrow.data2<-dim(data2)[1]
 
 data2<-data2 %>% mutate(date=rep(report.date,nrow.data2))
 
+#Add active students
+compute_active_students<-function(x,y){
+  result<<-as.numeric(x)-as.numeric(y)
+  return(result)
+}
+
+data2<-data2 %>% mutate(active_students = compute_active_students(EnrollmentNum,ExitTotal) )
+
 # Create column with data for the report
 #List of data per year
 list.per.year<-list()
+all.years<- all.years$year
 
+#Filter per year
+for(year.index in 1:length(all.years)){
+  current.year<-all.years[year.index]
+  #Select a specific year
+  tmp<-data2 %>% filter(grepl(current.year,year))
+  #select columns to be exported
+  data3<-tmp %>% select(date,grantee,EnrollmentPer,EnrollmentNum,EnrollmentDen,ExitTotal,ExitSuc,ExitUn,GEDPer,GEDNum,GEDDen,RegAp,PlacementPer,PlacementNum,PlacementDen,AttainmentPer,AttainmentNum,AttainmentDen,LitPer,LitNum,LitDen,RecidivismPer,RecidivismNum,RecidivismDen,RetentionPer,RetentionNum,RetentionDen,active_students)
+  
+  #output file name
+  outfile_name<-str_c("table_year_",current.year,".csv")
+  
+  write.csv2(data3,file = outfile_name,row.names = FALSE) 
+}
