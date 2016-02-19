@@ -30,8 +30,11 @@ data2<-data2 %>% transform(program_number_parse=str_c("YB",program_number_parse)
 data2<-data2 %>% mutate(program_number=program_number_parse)
 
 #Divide the program number into five categories based on the dates
-data2 %>% separate(program_number, into=c("YB","number","number"))
-
-
 #YB-26216-14-60-A-40 
-#pattern<-"YB-"
+data2<-data2 %>% separate(program_number_parse, into=c("YB","number1","year","number3","letter","state_number"),sep="-")
+
+#Eliminate na.omit
+
+data2<-na.omit(data2)
+
+
