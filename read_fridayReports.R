@@ -15,11 +15,14 @@ data<-as.data.frame(data)
 data2<-data %>% separate(`Youth Build Friday Update Report`,into=c("grantee","program_number_parse"),sep=", YB")
 
 #Get number of columns and rename the columns
-ncols<-length(colnames(data2))
+ncols<-length(colnames(data2))-2
+#ncols<-length(colnames(data2))
 
 col.unit<-"col"
-new.col.names<-rep(col.unit,ncols-2)
-new.col.num<-as.character(3:ncols)
+new.col.names<-rep(col.unit,ncols)
+new.col.num<-as.character(1:ncols)
+#new.col.num<-as.character(3:ncols)
+
 new.col.names<-str_c(new.col.names,new.col.num)
 
 colnames(data2)<-c(colnames(data2)[1:2],new.col.names)
@@ -66,7 +69,9 @@ date.string<-date.row$col2
 report.date<-as.Date(as.numeric(date.string),origin = "1899-12-30")
 
 #Add report date to a new colum
+nrow.data2<-dim(data2)[1]
 
+data2<-data2 %>% mutate(date=rep(report.date,nrow.data2))
 
 # Create column with data for the report
 #List of data per year
