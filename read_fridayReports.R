@@ -33,8 +33,15 @@ data2<-data2 %>% mutate(program_number=program_number_parse)
 #YB-26216-14-60-A-40 
 data2<-data2 %>% separate(program_number_parse, into=c("YB","number1","year","number3","letter","state_number"),sep="-")
 
-#Eliminate na.omit
-
+#Eliminate NA na.omit
 data2<-na.omit(data2)
 
+#Group data by year
+#by_year<-data2 %>%  group_by(year)
+
+#Group data by year
+all.years<-data2 %>% select(year) %>% distinct
+
+#List of data per year
+list.per.year<-list()
 
