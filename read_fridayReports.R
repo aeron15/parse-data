@@ -42,6 +42,33 @@ data2<-na.omit(data2)
 #Group data by year
 all.years<-data2 %>% select(year) %>% distinct
 
+#Rename first column to extract date 
+#Get other columns
+ncols<-length(colnames(data))
+
+col.unit<-"col"
+new.col.names<-rep(col.unit,ncols-1)
+new.col.num<-as.character(2:ncols)
+new.col.names<-str_c(new.col.names,new.col.num)
+colnames(data)[1]="first"
+colnames(data)<-c(colnames(data)[1],new.col.names)
+
+#Get date of the report
+date.row<-filter(data,grepl("Report run for:",first))
+date.string<-date.row$col2
+
+#Get data for the report
+# from Windows Excel:
+#origin = "1899-12-30"
+# from Mac Excel:
+#origin = "1904-01-01"
+
+report.date<-as.Date(as.numeric(date.string),origin = "1899-12-30")
+
+#Add report date to a new colum
+
+
+# Create column with data for the report
 #List of data per year
 list.per.year<-list()
 
