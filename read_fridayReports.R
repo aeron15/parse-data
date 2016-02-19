@@ -14,19 +14,46 @@ data<-as.data.frame(data)
 #Divide data into two columns
 data2<-data %>% separate(`Youth Build Friday Update Report`,into=c("grantee","program_number_parse"),sep=", YB")
 
+###
+new.col.names<-c("Region",
+"EnrollmentPeri",
+"EnrollmentNum",
+"EnrollmentDen",
+"ExitTotal",
+"ExitSuc",
+"ExitUn",
+"GEDPer",
+"GEDNum",
+"GEDDen",
+"RegAp",
+"PlacementPer",
+"PlacementNum",
+"PlacementDen",
+"AttainmentPer",
+"AttainmentNum",
+"AttainmentDen",
+"LitPer",
+"LitNum",
+"LitDen",
+"RecidivismPer",
+"RecidivismNum",
+"RecidivismDen",
+"RetentionPer",
+"RetentionNum",
+"RetentionDen")
+###
+
 #Get number of columns and rename the columns
-ncols<-length(colnames(data2))-2
-#ncols<-length(colnames(data2))
 
-col.unit<-"col"
-new.col.names<-rep(col.unit,ncols)
-new.col.num<-as.character(1:ncols)
-#new.col.num<-as.character(3:ncols)
-
-new.col.names<-str_c(new.col.names,new.col.num)
+#ncols<-length(colnames(data2))-2
+#col.unit<-"col"
+#new.col.names<-rep(col.unit,ncols)
+#new.col.num<-as.character(1:ncols)
+#new.col.names<-str_c(new.col.names,new.col.num)
 
 colnames(data2)<-c(colnames(data2)[1:2],new.col.names)
 
+###
 #Add YB again to that colum
 data2<-data2 %>% transform(program_number_parse=str_c("YB",program_number_parse))
 
