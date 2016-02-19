@@ -1,0 +1,2 @@
+(date,grantee,EnrollmentPer,EnrollmentNum,EnrollmentDen,ExitTotal,ExitSuc,ExitUn,GEDPer,GEDNum,GEDDen,
+RegAp,PlacementPer,PlacementNum,PlacementDen,AttainmentPer,AttainmentNum,AttainmentDen,LitPer,LitNum,LitDen,RecidivismPer,RecidivismNum,RecidivismDen,RetentionPer,RetentionNum,RetentionDen)

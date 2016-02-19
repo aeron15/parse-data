@@ -16,7 +16,7 @@ data2<-data %>% separate(`Youth Build Friday Update Report`,into=c("grantee","pr
 
 ###
 new.col.names<-c("Region",
-"EnrollmentPeri",
+"EnrollmentPer",
 "EnrollmentNum",
 "EnrollmentDen",
 "ExitTotal",
@@ -100,7 +100,23 @@ nrow.data2<-dim(data2)[1]
 
 data2<-data2 %>% mutate(date=rep(report.date,nrow.data2))
 
+#Add active students
+data2<-data2 %>% mutate(active_students = EnrollmentNum - ExitTotal)
+
+#Add active students
+compute_active_students<-function(x,y){
+  result<<-as.numeric(x)-as.numeric(y)
+  return(result)
+}
+
+data2<-data2 %>% mutate(active_students = compute_active_students(EnrollmentNum,ExitTotal) )
+
+#Only select specific columns and then export a different csv file per year
+data3<-data2 %>% select(date,grantee,EnrollmentPer,EnrollmentNum,EnrollmentDen,ExitTotal,ExitSuc,ExitUn,GEDPer,GEDNum,GEDDen,RegAp,PlacementPer,PlacementNum,PlacementDen,AttainmentPer,AttainmentNum,AttainmentDen,LitPer,LitNum,LitDen,RecidivismPer,RecidivismNum,RecidivismDen,RetentionPer,RetentionNum,RetentionDen,active_students)
+
 # Create column with data for the report
 #List of data per year
-list.per.year<-list()
+#list.per.year<-list()
+
+#Filter per year
 
